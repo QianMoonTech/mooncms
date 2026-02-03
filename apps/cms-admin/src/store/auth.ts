@@ -7,7 +7,7 @@ import { LOGIN_PATH } from '@vben/constants';
 import { preferences } from '@vben/preferences';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
-import { notification } from 'ant-design-vue';
+import { ElNotification } from 'element-plus';
 import { defineStore } from 'pinia';
 
 import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
@@ -24,7 +24,6 @@ export const useAuthStore = defineStore('auth', () => {
    * 异步处理登录操作
    * Asynchronously handle the login process
    * @param params 登录表单数据
-   * @param onSuccess 成功之后的回调函数
    */
   async function authLogin(
     params: Recordable<any>,
@@ -38,6 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       // 如果成功获取到 accessToken
       if (accessToken) {
+        // 将 accessToken 存储到 accessStore 中
         accessStore.setAccessToken(accessToken);
 
         // 获取用户信息并存储到 accessStore 中
@@ -62,10 +62,10 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         if (userInfo?.realName) {
-          notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            duration: 3,
-            message: $t('authentication.loginSuccess'),
+          ElNotification({
+            message: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+            title: $t('authentication.loginSuccess'),
+            type: 'success',
           });
         }
       }
@@ -84,7 +84,6 @@ export const useAuthStore = defineStore('auth', () => {
     } catch {
       // 不做任何处理
     }
-
     resetAllStores();
     accessStore.setLoginExpired(false);
 
