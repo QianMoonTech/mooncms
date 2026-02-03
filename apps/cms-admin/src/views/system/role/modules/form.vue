@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
-
 import type { Recordable } from '@vben/types';
 
 import type { SystemRoleApi } from '#/api/system/role';
@@ -9,8 +7,6 @@ import { computed, nextTick, ref } from 'vue';
 
 import { Tree, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
-
-import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { getMenuList } from '#/api/system/menu';
@@ -28,7 +24,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const permissions = ref<DataNode[]>([]);
+const permissions = ref<Recordable<any>[]>([]);
 const loadingPermissions = ref(false);
 
 const id = ref();
@@ -76,7 +72,7 @@ async function loadPermissions() {
   loadingPermissions.value = true;
   try {
     const res = await getMenuList();
-    permissions.value = res as unknown as DataNode[];
+    permissions.value = res as unknown as Recordable<any>[];
   } finally {
     loadingPermissions.value = false;
   }
@@ -101,7 +97,7 @@ function getNodeClass(node: Recordable<any>) {
   <Drawer :title="getDrawerTitle">
     <Form>
       <template #permissions="slotProps">
-        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
+        <div v-loading="loadingPermissions" class="w-full">
           <Tree
             :tree-data="permissions"
             multiple
@@ -118,20 +114,20 @@ function getNodeClass(node: Recordable<any>) {
               {{ $t(value.meta.title) }}
             </template>
           </Tree>
-        </Spin>
+        </div>
       </template>
     </Form>
   </Drawer>
 </template>
 <style lang="css" scoped>
-:deep(.ant-tree-title) {
+:deep(.el-tree-node__content) {
   .tree-actions {
     display: none;
     margin-left: 20px;
   }
 }
 
-:deep(.ant-tree-title:hover) {
+:deep(.el-tree-node__content:hover) {
   .tree-actions {
     display: flex;
     flex: auto;

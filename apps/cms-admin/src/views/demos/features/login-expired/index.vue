@@ -4,7 +4,7 @@ import type { LoginExpiredModeType } from '@vben/types';
 import { Page } from '@vben/common-ui';
 import { preferences, updatePreferences } from '@vben/preferences';
 
-import { Button, Card } from 'ant-design-vue';
+import { ElButton, ElCard } from 'element-plus';
 
 import { getMockStatusApi } from '#/api';
 
@@ -29,11 +29,11 @@ async function handleClick(type: LoginExpiredModeType) {
       </div>
     </template>
 
-    <Card class="mb-5" title="跳转登录页面方式">
-      <Button type="primary" @click="handleClick('page')"> 点击触发 </Button>
-    </Card>
-    <Card class="mb-5" title="登录弹窗方式">
-      <Button type="primary" @click="handleClick('modal')"> 点击触发 </Button>
-    </Card>
+    <ElCard class="mb-5" header="跳转登录页面方式">
+      <ElButton type="primary" @click="handleClick('page')"> 点击触发 </ElButton>
+    </ElCard>
+    <ElCard class="mb-5" header="登录弹窗方式">
+      <ElButton type="primary" @click="handleClick('modal')"> 点击触发 </ElButton>
+    </ElCard>
   </Page>
 </template>

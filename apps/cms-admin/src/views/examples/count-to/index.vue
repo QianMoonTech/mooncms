@@ -7,18 +7,18 @@ import { CountTo, Page, TransitionPresetsKeys } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
 import {
-  Button,
-  Card,
-  Col,
-  Form,
-  FormItem,
-  Input,
-  InputNumber,
-  message,
-  Row,
-  Select,
-  Switch,
-} from 'ant-design-vue';
+  ElButton,
+  ElCard,
+  ElCol,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElInputNumber,
+  ElMessage,
+  ElRow,
+  ElSelect,
+  ElSwitch,
+} from 'element-plus';
 
 const props = reactive<CountToProps & { transition: TransitionPresets }>({
   decimal: '.',
@@ -59,18 +59,16 @@ function openDocumentation() {
 }
 
 function onStarted() {
-  message.loading({
-    content: '动画已开始',
-    duration: 0,
-    key: 'animator-info',
+  ElMessage.info({
+    message: '动画已开始',
+    duration: 2000,
   });
 }
 
 function onFinished() {
-  message.success({
-    content: '动画已结束',
-    duration: 2,
-    key: 'animator-info',
+  ElMessage.success({
+    message: '动画已结束',
+    duration: 2000,
   });
 }
 </script>
@@ -80,29 +78,29 @@ function onFinished() {
       <span>
         使用useTransition封装的数字滚动动画组件，每次改变当前值都会产生过渡动画。
       </span>
-      <Button type="link" @click="openDocumentation">
+      <ElButton link @click="openDocumentation">
         查看useTransition文档
-      </Button>
+      </ElButton>
     </template>
-    <Card title="基本用法">
+    <ElCard header="基本用法">
       <div class="flex w-full items-center justify-center pb-4">
         <CountTo v-bind="props" @started="onStarted" @finished="onFinished" />
       </div>
-      <Form :model="props">
-        <Row :gutter="20">
-          <Col :span="8">
-            <FormItem label="初始值" name="startVal">
-              <InputNumber v-model:value="props.startVal" />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="当前值" name="endVal">
-              <InputNumber
-                v-model:value="props.endVal"
+      <ElForm :model="props">
+        <ElRow :gutter="20">
+          <ElCol :span="8">
+            <ElFormItem label="初始值" name="startVal">
+              <ElInputNumber v-model="props.startVal" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="当前值" name="endVal">
+              <ElInputNumber
+                v-model="props.endVal"
                 class="w-full"
                 :precision="props.decimals"
               >
-                <template #addonAfter>
+                <template #append>
                   <IconifyIcon
                     v-tippy="`设置一个随机值`"
                     class="size-5 cursor-pointer outline-none"
@@ -110,69 +108,69 @@ function onFinished() {
                     @click="changeNumber"
                   />
                 </template>
-              </InputNumber>
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="禁用动画" name="disabled">
-              <Switch v-model="props.disabled" />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="延迟动画" name="delay">
-              <InputNumber v-model:value="props.delay" :min="0" />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="持续时间" name="duration">
-              <InputNumber v-model:value="props.duration" :min="0" />
-            </FormItem>
-          </Col>
+              </ElInputNumber>
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="禁用动画" name="disabled">
+              <ElSwitch v-model="props.disabled" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="延迟动画" name="delay">
+              <ElInputNumber v-model="props.delay" :min="0" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="持续时间" name="duration">
+              <ElInputNumber v-model="props.duration" :min="0" />
+            </ElFormItem>
+          </ElCol>
 
-          <Col :span="8">
-            <FormItem label="小数位数" name="decimals">
-              <InputNumber
-                v-model:value="props.decimals"
+          <ElCol :span="8">
+            <ElFormItem label="小数位数" name="decimals">
+              <ElInputNumber
+                v-model="props.decimals"
                 :min="0"
                 :precision="0"
               />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="分隔符" name="separator">
-              <Input v-model:value="props.separator" />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="小数点" name="decimal">
-              <Input v-model:value="props.decimal" />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="动画" name="transition">
-              <Select v-model:value="props.transition">
-                <Select.Option
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="分隔符" name="separator">
+              <ElInput v-model="props.separator" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="小数点" name="decimal">
+              <ElInput v-model="props.decimal" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="动画" name="transition">
+              <ElSelect v-model="props.transition">
+                <ElOption
                   v-for="preset in TransitionPresetsKeys"
                   :key="preset"
                   :value="preset"
                 >
                   {{ preset }}
-                </Select.Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="前缀" name="prefix">
-              <Input v-model:value="props.prefix" />
-            </FormItem>
-          </Col>
-          <Col :span="8">
-            <FormItem label="后缀" name="suffix">
-              <Input v-model:value="props.suffix" />
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
+                </ElOption>
+              </ElSelect>
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="前缀" name="prefix">
+              <ElInput v-model="props.prefix" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="8">
+            <ElFormItem label="后缀" name="suffix">
+              <ElInput v-model="props.suffix" />
+            </ElFormItem>
+          </ElCol>
+        </ElRow>
+      </ElForm>
+    </ElCard>
   </Page>
 </template>

@@ -7,7 +7,7 @@ import { useAccess } from '@vben/access';
 import { Page } from '@vben/common-ui';
 import { resetAllStores, useUserStore } from '@vben/stores';
 
-import { Button, Card } from 'ant-design-vue';
+import { ElButton, ElCard } from 'element-plus';
 
 import { useAuthStore } from '#/store';
 
@@ -69,30 +69,30 @@ async function handleToggleAccessMode() {
     :title="`${accessMode === 'frontend' ? '前端' : '后端'}页面访问权限演示`"
     description="切换不同的账号，观察左侧菜单变化。"
   >
-    <Card class="mb-5" title="权限模式">
+    <ElCard class="mb-5" header="权限模式">
       <span class="font-semibold">当前权限模式:</span>
       <span class="mx-4 text-primary">{{
         accessMode === 'frontend' ? '前端权限控制' : '后端权限控制'
       }}</span>
-      <Button type="primary" @click="handleToggleAccessMode">
+      <ElButton type="primary" @click="handleToggleAccessMode">
         切换为{{ accessMode === 'frontend' ? '后端' : '前端' }}权限模式
-      </Button>
-    </Card>
-    <Card title="账号切换">
-      <Button :type="roleButtonType('super')" @click="changeAccount('super')">
+      </ElButton>
+    </ElCard>
+    <ElCard header="账号切换">
+      <ElButton :type="roleButtonType('super')" @click="changeAccount('super')">
         切换为 Super 账号
-      </Button>
+      </ElButton>
 
-      <Button
+      <ElButton
         :type="roleButtonType('admin')"
         class="mx-4"
         @click="changeAccount('admin')"
       >
         切换为 Admin 账号
-      </Button>
-      <Button :type="roleButtonType('user')" @click="changeAccount('user')">
+      </ElButton>
+      <ElButton :type="roleButtonType('user')" @click="changeAccount('user')">
         切换为 User 账号
-      </Button>
-    </Card>
+      </ElButton>
+    </ElCard>
   </Page>
 </template>

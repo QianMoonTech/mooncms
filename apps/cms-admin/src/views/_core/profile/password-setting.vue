@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import type { VbenFormSchema } from '#/adapter/form';
 
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
-import { message } from 'ant-design-vue';
-
-const profilePasswordSettingRef = ref();
+import { ElMessage } from 'element-plus';
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -53,12 +51,11 @@ const formSchema = computed((): VbenFormSchema[] => {
 });
 
 function handleSubmit() {
-  message.success('密码修改成功');
+  ElMessage.success('密码修改成功');
 }
 </script>
 <template>
   <ProfilePasswordSetting
-    ref="profilePasswordSettingRef"
     class="w-1/3"
     :form-schema="formSchema"
     @submit="handleSubmit"

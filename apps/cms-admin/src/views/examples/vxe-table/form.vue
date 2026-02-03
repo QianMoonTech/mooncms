@@ -1,127 +1,107 @@
 <script lang="ts" setup>
-import type { VbenFormProps } from '#/adapter/form';
-import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-
 import { Page } from '@vben/common-ui';
 
-import { message } from 'ant-design-vue';
-import dayjs from 'dayjs';
+import { ElCard, ElMessage } from 'element-plus';
 
+import { useVbenForm } from '#/adapter/form';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getExampleTableApi } from '#/api';
 
 interface RowType {
-  category: string;
-  color: string;
-  id: string;
-  price: string;
-  productName: string;
-  releaseDate: string;
+  address: string;
+  age: number;
+  id: number;
+  name: string;
+  nickname: string;
+  role: string;
 }
 
-const formOptions: VbenFormProps = {
-  // 默认展开
-  collapsed: false,
-  fieldMappingTime: [['date', ['start', 'end']]],
+const [Form] = useVbenForm({
+  handleSubmit: onSubmit,
+  layout: 'inline',
   schema: [
     {
       component: 'Input',
-      defaultValue: '1',
-      fieldName: 'category',
-      label: 'Category',
-    },
-    {
-      component: 'Input',
-      fieldName: 'productName',
-      label: 'ProductName',
-    },
-    {
-      component: 'Input',
-      fieldName: 'price',
-      label: 'Price',
+      componentProps: {
+        placeholder: '请输入用户名',
+      },
+      fieldName: 'name',
+      label: '用户名',
     },
     {
       component: 'Select',
       componentProps: {
-        allowClear: true,
         options: [
-          {
-            label: 'Color1',
-            value: '1',
-          },
-          {
-            label: 'Color2',
-            value: '2',
-          },
+          { label: 'Develop', value: 'Develop' },
+          { label: 'Test', value: 'Test' },
+          { label: 'PM', value: 'PM' },
         ],
-        placeholder: '请选择',
+        placeholder: '请选择角色',
       },
-      fieldName: 'color',
-      label: 'Color',
-    },
-    {
-      component: 'RangePicker',
-      defaultValue: [dayjs().subtract(7, 'days'), dayjs()],
-      fieldName: 'date',
-      label: 'Date',
+      fieldName: 'role',
+      label: '角色',
     },
   ],
-  // 控制表单是否显示折叠按钮
-  showCollapseButton: true,
-  // 是否在字段值改变时提交表单
-  submitOnChange: true,
-  // 按下回车时是否提交表单
-  submitOnEnter: false,
-};
-
-const gridOptions: VxeTableGridOptions<RowType> = {
-  checkboxConfig: {
-    highlight: true,
-    labelField: 'name',
+  showDefaultActions: true,
+  submitButtonOptions: {
+    text: '查询',
   },
-  columns: [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', title: 'Name', type: 'checkbox', width: 100 },
-    { field: 'category', title: 'Category' },
-    { field: 'color', title: 'Color' },
-    { field: 'productName', title: 'Product Name' },
-    { field: 'price', title: 'Price' },
-    { field: 'releaseDate', formatter: 'formatDateTime', title: 'Date' },
-  ],
-  exportConfig: {},
-  height: 'auto',
-  keepSource: true,
-  pagerConfig: {},
-  proxyConfig: {
-    ajax: {
-      query: async ({ page }, formValues) => {
-        message.success(`Query params: ${JSON.stringify(formValues)}`);
-        return await getExampleTableApi({
-          page: page.currentPage,
-          pageSize: page.pageSize,
-          ...formValues,
-        });
-      },
-    },
-  },
-  toolbarConfig: {
-    custom: true,
-    export: true,
-    refresh: true,
-    resizable: true,
-    search: true,
-    zoom: true,
-  },
-};
-
-const [Grid] = useVbenVxeGrid({
-  formOptions,
-  gridOptions,
 });
+
+const [Grid] = useVbenVxeGrid<RowType>({
+  gridOptions: {
+    columns: [
+      { title: '序号', type: 'seq', width: 50 },
+      { field: 'name', title: 'Name' },
+      { field: 'age', sortable: true, title: 'Age' },
+      { field: 'nickname', title: 'Nickname' },
+      { field: 'role', title: 'Role' },
+      { field: 'address', showOverflow: true, title: 'Address' },
+    ],
+    data: [
+      {
+        address: 'New York No. 1 Lake Park',
+        age: 32,
+        id: 10001,
+        name: 'Test1',
+        nickname: 'T1',
+        role: 'Develop',
+      },
+      {
+        address: 'Shanghai No. 1 Lake Park',
+        age: 28,
+        id: 10002,
+        name: 'Test2',
+        nickname: 'T2',
+        role: 'Test',
+      },
+      {
+        address: 'Los Angeles No. 1 Lake Park',
+        age: 24,
+        id: 10003,
+        name: 'Test3',
+        nickname: 'T3',
+        role: 'PM',
+      },
+    ],
+    height: 'auto',
+    pagerConfig: {
+      enabled: false,
+    },
+  },
+});
+
+function onSubmit(values: Record<string, any>) {
+  ElMessage.success({
+    message: `查询参数：${JSON.stringify(values)}`,
+  });
+}
 </script>
 
 <template>
-  <Page auto-content-height>
-    <Grid />
+  <Page auto-content-height title="Vxe Table 表单查询">
+    <ElCard class="mb-4" header="表单查询">
+      <Form />
+      <Grid class="mt-4" />
+    </ElCard>
   </Page>
 </template>

@@ -1,4 +1,4 @@
-import type { Locale } from 'ant-design-vue/es/locale';
+import type { Language } from 'element-plus/es/locale';
 
 import type { App } from 'vue';
 
@@ -13,11 +13,11 @@ import {
 } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 
-import antdEnLocale from 'ant-design-vue/es/locale/en_US';
-import antdDefaultLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
+import enLocale from 'element-plus/es/locale/lang/en';
+import defaultLocale from 'element-plus/es/locale/lang/zh-cn';
 
-const antdLocale = ref<Locale>(antdDefaultLocale);
+const elementLocale = ref<Language>(defaultLocale);
 
 const modules = import.meta.glob('./langs/**/*.json');
 
@@ -43,7 +43,7 @@ async function loadMessages(lang: SupportedLanguagesType) {
  * @param lang
  */
 async function loadThirdPartyMessage(lang: SupportedLanguagesType) {
-  await Promise.all([loadAntdLocale(lang), loadDayjsLocale(lang)]);
+  await Promise.all([loadElementLocale(lang), loadDayjsLocale(lang)]);
 }
 
 /**
@@ -74,17 +74,17 @@ async function loadDayjsLocale(lang: SupportedLanguagesType) {
 }
 
 /**
- * 加载antd的语言包
+ * 加载element-plus的语言包
  * @param lang
  */
-async function loadAntdLocale(lang: SupportedLanguagesType) {
+async function loadElementLocale(lang: SupportedLanguagesType) {
   switch (lang) {
     case 'en-US': {
-      antdLocale.value = antdEnLocale;
+      elementLocale.value = enLocale;
       break;
     }
     case 'zh-CN': {
-      antdLocale.value = antdDefaultLocale;
+      elementLocale.value = defaultLocale;
       break;
     }
   }
@@ -99,4 +99,4 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
   });
 }
 
-export { $t, antdLocale, setupI18n };
+export { $t, elementLocale, setupI18n };

@@ -18,14 +18,14 @@ import {
   SvgWeChatIcon,
 } from '@vben/icons';
 
-import { Card, Input } from 'ant-design-vue';
+import { ElCard, ElInput } from 'element-plus';
 
 const iconValue1 = ref('ant-design:trademark-outlined');
 const iconValue2 = ref('svg:avatar-1');
 const iconValue3 = ref('mdi:alien-outline');
 const iconValue4 = ref('mdi-light:book-multiple');
 
-const inputComponent = h(Input);
+const inputComponent = h(ElInput);
 </script>
 
 <template>
@@ -44,7 +44,7 @@ const inputComponent = h(Input);
       </div>
     </template>
 
-    <Card class="mb-5" title="Iconify">
+    <ElCard class="mb-5" header="Iconify">
       <div class="flex items-center gap-5">
         <SvgGithubIcon class="size-8" />
         <SvgGoogleIcon class="size-8" />
@@ -52,9 +52,9 @@ const inputComponent = h(Input);
         <SvgWeChatIcon class="size-8" />
         <MdiKeyboardEsc class="size-8" />
       </div>
-    </Card>
+    </ElCard>
 
-    <Card class="mb-5" title="Svg Icons">
+    <ElCard class="mb-5" header="Svg Icons">
       <div class="flex items-center gap-5">
         <SvgAvatar1Icon class="size-8" />
         <SvgAvatar2Icon class="size-8 text-red-500" />
@@ -65,9 +65,9 @@ const inputComponent = h(Input);
         <SvgCardIcon class="size-8" />
         <SvgDownloadIcon class="size-8" />
       </div>
-    </Card>
+    </ElCard>
 
-    <Card class="mb-5" title="Tailwind CSS">
+    <ElCard class="mb-5" header="Tailwind CSS">
       <div class="flex items-center gap-5 text-3xl">
         <span class="icon-[ant-design--alipay-circle-outlined]"></span>
         <span class="icon-[ant-design--account-book-filled]"></span>
@@ -76,9 +76,9 @@ const inputComponent = h(Input);
         <span class="icon-[svg-spinners--blocks-wave]"></span>
         <span class="icon-[line-md--compass-filled-loop]"></span>
       </div>
-    </Card>
+    </ElCard>
 
-    <Card class="mb-5" title="图标选择器">
+    <ElCard class="mb-5" header="图标选择器">
       <div class="mb-5 flex items-center gap-5">
         <span>原始样式(Iconify):</span>
         <IconPicker v-model="iconValue1" class="w-[200px]" />
@@ -92,24 +92,24 @@ const inputComponent = h(Input);
         <IconPicker
           :input-component="inputComponent"
           v-model="iconValue3"
-          icon-slot="addonAfter"
-          model-value-prop="value"
+          icon-slot="append"
+          model-value-prop="modelValue"
           prefix="mdi"
         />
       </div>
       <div class="flex items-center gap-5">
         <span>显示为一个Icon:</span>
-        <Input
-          v-model:value="iconValue4"
-          allow-clear
+        <ElInput
+          v-model="iconValue4"
+          clearable
           placeholder="点击这里选择图标"
           style="width: 300px"
         >
-          <template #addonAfter>
+          <template #append>
             <IconPicker v-model="iconValue4" prefix="mdi-light" type="icon" />
           </template>
-        </Input>
+        </ElInput>
       </div>
-    </Card>
+    </ElCard>
   </Page>
 </template>

@@ -1,51 +1,54 @@
 <script lang="ts" setup>
-import type { JsonViewerAction, JsonViewerValue } from '@vben/common-ui';
+import { ref } from 'vue';
 
 import { JsonViewer, Page } from '@vben/common-ui';
 
-import { Card, message } from 'ant-design-vue';
+import { ElButton, ElCard, ElInput } from 'element-plus';
 
-import { json1, json2 } from './data';
+const jsonData = ref({
+  name: 'John Doe',
+  age: 30,
+  email: 'john@example.com',
+  address: {
+    street: '123 Main St',
+    city: 'New York',
+    country: 'USA',
+  },
+  hobbies: ['reading', 'swimming', 'coding'],
+});
 
-function handleKeyClick(key: string) {
-  message.info(`点击了Key ${key}`);
-}
+const inputValue = ref(JSON.stringify(jsonData.value, null, 2));
 
-function handleValueClick(value: JsonViewerValue) {
-  message.info(`点击了Value ${JSON.stringify(value)}`);
-}
-
-function handleCopied(_event: JsonViewerAction) {
-  message.success('已复制JSON');
+function updateJson() {
+  try {
+    jsonData.value = JSON.parse(inputValue.value);
+  } catch (e) {
+    // 解析失败，保持原值
+  }
 }
 </script>
+
 <template>
-  <Page
-    title="Json Viewer"
-    description="一个渲染 JSON 结构数据的组件，支持复制、展开等，简单易用"
-  >
-    <Card title="默认配置">
-      <JsonViewer :value="json1" />
-    </Card>
-    <Card title="可复制、默认展开3层、显示边框、事件处理" class="mt-4">
-      <JsonViewer
-        :value="json2"
-        :expand-depth="3"
-        copyable
-        :sort="false"
-        @key-click="handleKeyClick"
-        @value-click="handleValueClick"
-        @copied="handleCopied"
-        boxed
-      />
-    </Card>
-    <Card title="预览模式" class="mt-4">
-      <JsonViewer
-        :value="json2"
-        copyable
-        preview-mode
-        :show-array-index="false"
-      />
-    </Card>
+  <Page title="JSON Viewer 示例">
+    <ElCard class="mb-4" header="JSON 查看器">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div>
+          <h4 class="mb-2 font-semibold">输入 JSON：</h4>
+          <ElInput
+            v-model="inputValue"
+            type="textarea"
+            :rows="15"
+            placeholder="请输入 JSON 数据"
+          />
+          <ElButton class="mt-2" type="primary" @click="updateJson">
+            更新
+          </ElButton>
+        </div>
+        <div>
+          <h4 class="mb-2 font-semibold">预览：</h4>
+          <JsonViewer :value="jsonData" />
+        </div>
+      </div>
+    </ElCard>
   </Page>
 </template>

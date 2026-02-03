@@ -1,81 +1,74 @@
 <script lang="ts" setup>
-import type { VxeGridProps } from '#/adapter/vxe-table';
-
 import { Page } from '@vben/common-ui';
 
-import { Button } from 'ant-design-vue';
+import { ElButton, ElCard } from 'element-plus';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getExampleTableApi } from '#/api';
 
 interface RowType {
-  category: string;
-  color: string;
-  id: string;
-  price: string;
-  productName: string;
-  releaseDate: string;
+  address: string;
+  age: number;
+  id: number;
+  name: string;
+  nickname: string;
+  role: string;
 }
 
-const gridOptions: VxeGridProps<RowType> = {
-  checkboxConfig: {
-    highlight: true,
-    labelField: 'name',
-  },
-  columns: [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', title: 'Name', type: 'checkbox', width: 100 },
-    { field: 'category', sortable: true, title: 'Category' },
-    { field: 'color', sortable: true, title: 'Color' },
-    { field: 'productName', sortable: true, title: 'Product Name' },
-    { field: 'price', sortable: true, title: 'Price' },
-    { field: 'releaseDate', formatter: 'formatDateTime', title: 'DateTime' },
-  ],
-  exportConfig: {},
-  height: 'auto',
-  keepSource: true,
-  proxyConfig: {
-    ajax: {
-      query: async ({ page, sort }) => {
-        return await getExampleTableApi({
-          page: page.currentPage,
-          pageSize: page.pageSize,
-          sortBy: sort.field,
-          sortOrder: sort.order,
-        });
+const [Grid, gridApi] = useVbenVxeGrid<RowType>({
+  gridOptions: {
+    columns: [
+      { title: '序号', type: 'seq', width: 50 },
+      { field: 'name', title: 'Name' },
+      { field: 'age', sortable: true, title: 'Age' },
+      { field: 'nickname', title: 'Nickname' },
+      { field: 'role', title: 'Role' },
+      { field: 'address', showOverflow: true, title: 'Address' },
+    ],
+    height: 'auto',
+    pagerConfig: {
+      enabled: true,
+      pageSize: 10,
+    },
+    proxyConfig: {
+      ajax: {
+        query: async ({ page }: { page: { currentPage: number; pageSize: number } }) => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              const data = Array.from({ length: 100 }, (_, i) => ({
+                address: `Address ${i + 1}`,
+                age: 20 + (i % 50),
+                id: 10001 + i,
+                name: `Name ${i + 1}`,
+                nickname: `Nick ${i + 1}`,
+                role: ['Develop', 'Test', 'PM'][i % 3],
+              }));
+              resolve({
+                items: data.slice(
+                  (page.currentPage - 1) * page.pageSize,
+                  page.currentPage * page.pageSize,
+                ),
+                total: data.length,
+              });
+            }, 500);
+          });
+        },
       },
     },
-    sort: true,
   },
-  sortConfig: {
-    defaultSort: { field: 'category', order: 'desc' },
-    remote: true,
-  },
-  toolbarConfig: {
-    custom: true,
-    export: true,
-    // import: true,
-    refresh: true,
-    zoom: true,
-  },
-};
-
-const [Grid, gridApi] = useVbenVxeGrid({
-  gridOptions,
 });
+
+function reload() {
+  gridApi.reload();
+}
 </script>
 
 <template>
-  <Page auto-content-height>
-    <Grid table-title="数据列表" table-title-help="提示">
-      <template #toolbar-tools>
-        <Button class="mr-2" type="primary" @click="() => gridApi.query()">
-          刷新当前页面
-        </Button>
-        <Button type="primary" @click="() => gridApi.reload()">
-          刷新并返回第一页
-        </Button>
+  <Page auto-content-height title="Vxe Table 远程数据">
+    <ElCard class="mb-4" header="远程数据">
+      <template #extra>
+        <ElButton type="primary" @click="reload">刷新</ElButton>
       </template>
-    </Grid>
+      <Grid />
+    </ElCard>
   </Page>
 </template>

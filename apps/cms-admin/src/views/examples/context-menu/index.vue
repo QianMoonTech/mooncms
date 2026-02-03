@@ -3,7 +3,7 @@ import { Page } from '@vben/common-ui';
 
 import { VbenContextMenu } from '@vben-core/shadcn-ui';
 
-import { Button, Card, message } from 'ant-design-vue';
+import { ElButton, ElCard, ElMessage } from 'element-plus';
 
 const needHidden = (role: string) => {
   return role === 'user';
@@ -14,31 +14,31 @@ const contextMenus = () => {
     {
       text: '刷新',
       key: 'refresh',
-      handler: (data: any) => {
-        message.success('刷新成功', data);
+      handler: (_data: any) => {
+        ElMessage.success('刷新成功');
       },
       hidden: needHidden('admin'),
     },
     {
       text: '关闭当前',
       key: 'close-current',
-      handler: (data: any) => {
-        message.success('关闭当前', data);
+      handler: (_data: any) => {
+        ElMessage.success('关闭当前');
       },
       hidden: needHidden('user'),
     },
     {
       text: '关闭其他',
       key: 'close-other',
-      handler: (data: any) => {
-        message.success('关闭其他', data);
+      handler: (_data: any) => {
+        ElMessage.success('关闭其他');
       },
     },
     {
       text: '关闭所有',
       key: 'close-all',
-      handler: (data: any) => {
-        message.success('关闭所有', data);
+      handler: (_data: any) => {
+        ElMessage.success('关闭所有');
       },
     },
   ];
@@ -47,13 +47,13 @@ const contextMenus = () => {
 
 <template>
   <Page title="Context Menu 上下文菜单">
-    <Card title="基本使用">
+    <ElCard header="基本使用">
       <div>一共四个菜单（刷新、关闭当前、关闭其他、关闭所有）</div>
       <br />
       <br />
       <VbenContextMenu :menus="contextMenus" :modal="true" item-class="pr-6">
-        <Button> 右键点击我打开上下文菜单(有隐藏项) </Button>
+        <ElButton> 右键点击我打开上下文菜单(有隐藏项) </ElButton>
       </VbenContextMenu>
-    </Card>
+    </ElCard>
   </Page>
 </template>

@@ -1,69 +1,60 @@
 <script lang="ts" setup>
-import type { VxeGridProps } from '#/adapter/vxe-table';
-
 import { Page } from '@vben/common-ui';
 
-import { Button } from 'ant-design-vue';
+import { ElCard } from 'element-plus';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getExampleTableApi } from '#/api';
 
 interface RowType {
-  category: string;
-  color: string;
-  id: string;
-  price: string;
-  productName: string;
-  releaseDate: string;
+  address: string;
+  age: number;
+  id: number;
+  name: string;
+  nickname: string;
+  role: string;
 }
 
-const gridOptions: VxeGridProps<RowType> = {
-  columns: [
-    { fixed: 'left', title: '序号', type: 'seq', width: 50 },
-    { field: 'category', title: 'Category', width: 300 },
-    { field: 'color', title: 'Color', width: 300 },
-    { field: 'productName', title: 'Product Name', width: 300 },
-    { field: 'price', title: 'Price', width: 300 },
-    {
-      field: 'releaseDate',
-      formatter: 'formatDateTime',
-      title: 'DateTime',
-      width: 500,
-    },
-    {
-      field: 'action',
-      fixed: 'right',
-      slots: { default: 'action' },
-      title: '操作',
-      width: 120,
-    },
-  ],
-  height: 'auto',
-  pagerConfig: {},
-  proxyConfig: {
-    ajax: {
-      query: async ({ page }) => {
-        return await getExampleTableApi({
-          page: page.currentPage,
-          pageSize: page.pageSize,
-        });
+const [Grid] = useVbenVxeGrid<RowType>({
+  gridOptions: {
+    columns: [
+      { fixed: 'left', title: '序号', type: 'seq', width: 50 },
+      { field: 'name', fixed: 'left', title: 'Name', width: 120 },
+      { field: 'age', sortable: true, title: 'Age', width: 100 },
+      { field: 'nickname', title: 'Nickname', width: 120 },
+      { field: 'role', title: 'Role', width: 120 },
+      {
+        field: 'address',
+        showOverflow: true,
+        title: 'Address',
+        width: 300,
       },
+      {
+        field: 'name',
+        fixed: 'right',
+        title: 'Name2',
+        width: 120,
+      },
+    ],
+    data: Array.from({ length: 20 }, (_, i) => ({
+      address: `Address ${i + 1}`,
+      age: 20 + i,
+      id: 10001 + i,
+      name: `Name ${i + 1}`,
+      nickname: `Nick ${i + 1}`,
+      role: `Role ${i + 1}`,
+    })),
+    height: 'auto',
+    pagerConfig: {
+      enabled: false,
     },
   },
-  rowConfig: {
-    isHover: true,
-  },
-};
-
-const [Grid] = useVbenVxeGrid({ gridOptions });
+});
 </script>
 
 <template>
-  <Page auto-content-height>
-    <Grid>
-      <template #action>
-        <Button type="link">编辑</Button>
-      </template>
-    </Grid>
+  <Page auto-content-height title="Vxe Table 固定列">
+    <ElCard class="mb-4" header="固定列">
+      <Grid />
+    </ElCard>
   </Page>
 </template>

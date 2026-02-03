@@ -7,7 +7,7 @@ import { computed, ref, useTemplateRef } from 'vue';
 import { AuthenticationCodeLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { ElMessage } from 'element-plus';
 
 defineOptions({ name: 'CodeLogin' });
 
@@ -16,17 +16,16 @@ const CODE_LENGTH = 6;
 const loginRef =
   useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
 function sendCodeApi(phoneNumber: string) {
-  message.loading({
-    content: $t('page.auth.sendingCode'),
+  const loadingInstance = ElMessage.info({
+    message: $t('page.auth.sendingCode'),
     duration: 0,
-    key: 'sending-code',
   });
   return new Promise((resolve) => {
     setTimeout(() => {
-      message.success({
-        content: $t('page.auth.codeSentTo', [phoneNumber]),
-        duration: 3,
-        key: 'sending-code',
+      loadingInstance.close();
+      ElMessage.success({
+        message: $t('page.auth.codeSentTo', [phoneNumber]),
+        duration: 3000,
       });
       resolve({ code: '123456', phoneNumber });
     }, 3000);

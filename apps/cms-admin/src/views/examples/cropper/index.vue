@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { UploadChangeParam } from 'ant-design-vue';
+import type { UploadFile } from 'element-plus';
 
 import { ref } from 'vue';
 
 import { Page, VCropper } from '@vben/common-ui';
 
-import { Button, Card, Select, Upload } from 'ant-design-vue';
+import { ElButton, ElCard, ElSelect, ElUpload } from 'element-plus';
 
 const options = [
   { label: '1:1', value: '1:1' },
@@ -20,8 +20,8 @@ const validAspectRatio = ref<string | undefined>('1:1');
 const imgUrl = ref('');
 const cropperImg = ref();
 
-const selectImgFile = (event: UploadChangeParam) => {
-  const file = event.fileList[0]?.originFileObj;
+const selectImgFile = (uploadFile: UploadFile) => {
+  const file = uploadFile.raw;
   if (!file) return;
 
   if (!file.type.startsWith('image/')) {
@@ -69,23 +69,23 @@ const downloadImage = () => {
     title="VCropper 图片裁剪"
     description="VCropper是一个图片裁剪组件，提供基础的图片裁剪功能。"
   >
-    <Card>
+    <ElCard>
       <div class="image-cropper-container">
         <div class="cropper-ratio-display">
           <label class="ratio-label">当前裁剪比例：</label>
-          <Select
+          <ElSelect
             class="w-24"
-            v-model:value="validAspectRatio"
+            v-model="validAspectRatio"
             :options="options"
           />
-          <Upload
-            :max-count="1"
-            :show-upload-list="false"
+          <ElUpload
+            :limit="1"
+            :show-file-list="false"
             :before-upload="() => false"
-            @change="selectImgFile"
+            :on-change="selectImgFile"
           >
-            <Button>上传图片</Button>
-          </Upload>
+            <ElButton>上传图片</ElButton>
+          </ElUpload>
         </div>
 
         <div v-if="imgUrl" class="cropper-main-wrapper">
@@ -99,12 +99,12 @@ const downloadImage = () => {
 
           <!-- 操作按钮组 -->
           <div class="cropper-btn-group">
-            <Button :loading="cropLoading" @click="cropImage" type="primary">
+            <ElButton :loading="cropLoading" @click="cropImage" type="primary">
               裁剪
-            </Button>
-            <Button v-if="cropperImg" @click="downloadImage" danger>
+            </ElButton>
+            <ElButton v-if="cropperImg" @click="downloadImage" type="danger">
               下载图片
-            </Button>
+            </ElButton>
           </div>
 
           <!-- 裁剪预览 -->
@@ -116,7 +116,7 @@ const downloadImage = () => {
           />
         </div>
       </div>
-    </Card>
+    </ElCard>
   </Page>
 </template>
 <style scoped>

@@ -7,7 +7,7 @@ import { useAccessStore } from '@vben/stores';
 
 import { MenuBadge } from '@vben-core/menu-ui';
 
-import { Button, Card, Radio, RadioGroup } from 'ant-design-vue';
+import { ElButton, ElCard, ElRadio, ElRadioGroup } from 'element-plus';
 
 import { useVbenForm } from '#/adapter/form';
 
@@ -88,11 +88,11 @@ function updateMenuBadge() {
     description="菜单项上可以显示徽标，这些徽标可以主动更新"
     title="菜单徽标"
   >
-    <Card title="徽标更新">
+    <ElCard header="徽标更新">
       <Form>
         <template #badgeVariants="slotProps">
-          <RadioGroup v-bind="slotProps">
-            <Radio
+          <ElRadioGroup v-bind="slotProps">
+            <ElRadio
               v-for="color in colors"
               :key="color.value"
               :value="color.value"
@@ -105,13 +105,13 @@ function updateMenuBadge() {
                   v-bind="{ ...badgeProps, badgeVariants: color.value }"
                 />
               </div>
-            </Radio>
-          </RadioGroup>
+            </ElRadio>
+          </ElRadioGroup>
         </template>
         <template #action>
-          <Button type="primary" @click="updateMenuBadge">更新徽标</Button>
+          <ElButton type="primary" @click="updateMenuBadge">更新徽标</ElButton>
         </template>
       </Form>
-    </Card>
+    </ElCard>
   </Page>
 </template>

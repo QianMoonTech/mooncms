@@ -1,24 +1,40 @@
 <script lang="ts" setup>
 import { useVbenModal } from '@vben/common-ui';
 
-import { Button } from 'ant-design-vue';
+import { ElButton, ElMessage } from 'element-plus';
 
-import DragDemo from './drag-demo.vue';
-
-const [Modal] = useVbenModal({
-  destroyOnClose: true,
+const [Modal, modalApi] = useVbenModal({
+  draggable: true,
+  onCancel() {
+    modalApi.close();
+  },
+  onConfirm() {
+    ElMessage.info('onConfirm');
+    // modalApi.close();
+  },
+  title: '嵌套弹窗示例',
 });
-const [BaseModal, baseModalApi] = useVbenModal({
-  connectedComponent: DragDemo,
+
+const [InnerModal, innerModalApi] = useVbenModal({
+  onCancel() {
+    innerModalApi.close();
+  },
+  onConfirm() {
+    ElMessage.info('内层弹窗 onConfirm');
+    innerModalApi.close();
+  },
+  title: '内层弹窗',
 });
 
-function openNestedModal() {
-  baseModalApi.open();
+function openInnerModal() {
+  innerModalApi.open();
 }
 </script>
 <template>
-  <Modal title="嵌套弹窗示例">
-    <Button @click="openNestedModal" type="primary">打开子弹窗</Button>
-    <BaseModal />
+  <Modal>
+    <InnerModal>
+      <p>这是内层弹窗的内容</p>
+    </InnerModal>
+    <ElButton type="primary" @click="openInnerModal">打开内层弹窗</ElButton>
   </Modal>
 </template>

@@ -2,7 +2,7 @@
 import type { IProducts } from './typing';
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import { Button } from 'ant-design-vue';
+import { ElButton } from 'element-plus';
 
 const LIMIT = 10;
 const fetchProducts = async ({ pageParam = 0 }): Promise<IProducts> => {
@@ -45,14 +45,14 @@ const {
           {{ product.title }}
         </li>
       </ul>
-      <Button
+      <ElButton
         :disabled="!hasNextPage || isFetchingNextPage"
         @click="() => fetchNextPage()"
       >
         <span v-if="isFetchingNextPage">加载中...</span>
         <span v-else-if="hasNextPage">加载更多</span>
         <span v-else>没有更多了</span>
-      </Button>
+      </ElButton>
     </div>
   </div>
 </template>

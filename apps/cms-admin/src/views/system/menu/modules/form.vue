@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
-
 import type { Recordable } from '@vben/types';
 
 import type { VbenFormSchema } from '#/adapter/form';
@@ -10,7 +8,6 @@ import { computed, h, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $te } from '@vben/locales';
-import { getPopupContainer } from '@vben/utils';
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
@@ -71,7 +68,7 @@ const schema: VbenFormSchema[] = [
     componentProps: {
       api: getMenuList,
       class: 'w-full',
-      filterTreeNode(input: string, node: Recordable<any>) {
+      filterNodeMethod(input: string, node: Recordable<any>) {
         if (!input || input.length === 0) {
           return true;
         }
@@ -79,7 +76,6 @@ const schema: VbenFormSchema[] = [
         if (!title) return false;
         return title.includes(input) || $t(title).includes(input);
       },
-      getPopupContainer,
       labelField: 'meta.title',
       showSearch: true,
       treeDefaultExpandAll: true,
@@ -107,8 +103,8 @@ const schema: VbenFormSchema[] = [
     componentProps() {
       // 不需要处理多语言时就无需这么做
       return {
-        ...(titleSuffix.value && { addonAfter: titleSuffix.value }),
-        onChange({ target: { value } }: ChangeEvent) {
+        ...(titleSuffix.value && { suffix: titleSuffix.value }),
+        onChange(value: string) {
           titleSuffix.value = value && $te(value) ? $t(value) : undefined;
         },
       };
