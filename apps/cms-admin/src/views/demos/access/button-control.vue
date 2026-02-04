@@ -101,11 +101,7 @@ async function changeAccount(role: string) {
       </AccessControl>
     </ElCard>
 
-    <ElCard
-      v-if="accessMode === 'frontend'"
-      class="mb-5"
-      shadow="hover"
-    >
+    <ElCard v-if="accessMode === 'frontend'" class="mb-5" shadow="hover">
       <template #header>
         <div>组件形式控制 - 角色</div>
       </template>
@@ -136,7 +132,10 @@ async function changeAccount(role: string) {
       <ElButton v-if="hasAccessByCodes(['AC_1000001'])" class="mr-4">
         User 账号可见 ["AC_1000001"]
       </ElButton>
-      <ElButton v-if="hasAccessByCodes(['AC_100100', 'AC_100030'])" class="mr-4">
+      <ElButton
+        v-if="hasAccessByCodes(['AC_100100', 'AC_100030'])"
+        class="mr-4"
+      >
         Super & Admin 账号可见 ["AC_100100","AC_100030"]
       </ElButton>
     </ElCard>
@@ -163,8 +162,12 @@ async function changeAccount(role: string) {
       <template #header>
         <div>指令方式 - 角色</div>
       </template>
-      <ElButton class="mr-4" v-access:role="['super']"> Super 角色可见 </ElButton>
-      <ElButton class="mr-4" v-access:role="['admin']"> Admin 角色可见 </ElButton>
+      <ElButton class="mr-4" v-access:role="['super']">
+        Super 角色可见
+      </ElButton>
+      <ElButton class="mr-4" v-access:role="['admin']">
+        Admin 角色可见
+      </ElButton>
       <ElButton class="mr-4" v-access:role="['user']"> User 角色可见 </ElButton>
       <ElButton class="mr-4" v-access:role="['super', 'admin']">
         Super & Admin 角色可见

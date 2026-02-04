@@ -31,11 +31,15 @@ async function handleClick(type: LoginExpiredModeType) {
 
     <ElCard class="mb-5">
       <template #header>跳转登录页面方式</template>
-      <ElButton type="primary" @click="handleClick('page')"> 点击触发 </ElButton>
+      <ElButton type="primary" @click="handleClick('page')">
+        点击触发
+      </ElButton>
     </ElCard>
     <ElCard class="mb-5">
       <template #header>登录弹窗方式</template>
-      <ElButton type="primary" @click="handleClick('modal')"> 点击触发 </ElButton>
+      <ElButton type="primary" @click="handleClick('modal')">
+        点击触发
+      </ElButton>
     </ElCard>
   </Page>
 </template>

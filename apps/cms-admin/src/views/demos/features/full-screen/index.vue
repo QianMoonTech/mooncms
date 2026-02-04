@@ -34,7 +34,9 @@ const { isFullscreen: isDomFullscreen, toggle: toggleDom } =
 
     <ElCard class="mt-5">
       <template #header>Dom Full Screen</template>
-      <ElButton type="primary" @click="toggleDom"> Enter Dom Full Screen </ElButton>
+      <ElButton type="primary" @click="toggleDom">
+        Enter Dom Full Screen
+      </ElButton>
     </ElCard>
 
     <div

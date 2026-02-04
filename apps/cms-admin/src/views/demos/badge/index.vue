@@ -38,12 +38,11 @@ const [Form] = useVbenForm({
     {
       component: 'RadioGroup',
       componentProps: {
-        buttonStyle: 'solid',
         options: [
           { label: '点徽标', value: 'dot' },
           { label: '文字徽标', value: 'normal' },
         ],
-        optionType: 'button',
+        isButton: true,
       },
       defaultValue: badgeProps.badgeType,
       fieldName: 'badgeType',

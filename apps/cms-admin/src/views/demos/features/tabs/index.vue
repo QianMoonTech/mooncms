@@ -46,7 +46,9 @@ function reset() {
         如果标签页存在，直接跳转切换。如果标签页不存在，则打开新的标签页。
       </div>
       <div class="flex flex-wrap gap-3">
-        <ElButton type="primary" @click="openTab"> 打开 "关于" 标签页 </ElButton>
+        <ElButton type="primary" @click="openTab">
+          打开 "关于" 标签页
+        </ElButton>
         <ElButton type="primary" @click="closeTabByKey('/vben-admin/about')">
           关闭 "关于" 标签页
         </ElButton>
@@ -66,11 +68,15 @@ function reset() {
         <ElButton type="primary" @click="closeRightTabs()">
           关闭右侧标签页
         </ElButton>
-        <ElButton type="primary" @click="closeAllTabs()"> 关闭所有标签页 </ElButton>
+        <ElButton type="primary" @click="closeAllTabs()">
+          关闭所有标签页
+        </ElButton>
         <ElButton type="primary" @click="closeOtherTabs()">
           关闭其他标签页
         </ElButton>
-        <ElButton type="primary" @click="refreshTab()"> 刷新当前标签页 </ElButton>
+        <ElButton type="primary" @click="refreshTab()">
+          刷新当前标签页
+        </ElButton>
       </div>
     </ElCard>
 
@@ -82,7 +88,7 @@ function reset() {
       <div class="flex flex-wrap items-center gap-3">
         <ElInput
           v-model="newTabTitle"
-          class="w-40"
+          class="!w-40"
           placeholder="请输入新标题"
         />
         <ElButton type="primary" @click="() => setTabTitle(newTabTitle)">

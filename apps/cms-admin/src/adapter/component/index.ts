@@ -132,17 +132,13 @@ const withPreviewUpload = () => {
       case 'picture-card': {
         return {
           default: () =>
-            h(
-              'div',
-              { class: 'flex flex-col items-center justify-center' },
-              [
-                h(IconifyIcon, {
-                  icon: 'ant-design:plus-outlined',
-                  class: 'mb-1 size-5',
-                }),
-                h('span', { class: 'text-xs' }, placeholder),
-              ],
-            ),
+            h('div', { class: 'flex flex-col items-center justify-center' }, [
+              h(IconifyIcon, {
+                icon: 'ant-design:plus-outlined',
+                class: 'mb-1 size-5',
+              }),
+              h('span', { class: 'text-xs' }, placeholder),
+            ]),
         };
       }
       default: {
@@ -220,45 +216,41 @@ const withPreviewUpload = () => {
                     aspectRatio,
                   }),
                 footer: () =>
-                  h(
-                    'div',
-                    { class: 'flex justify-end gap-2' },
-                    [
-                      h(
-                        ElButton,
-                        {
-                          onClick: () => {
-                            resolve('');
+                  h('div', { class: 'flex justify-end gap-2' }, [
+                    h(
+                      ElButton,
+                      {
+                        onClick: () => {
+                          resolve('');
+                          closeModal();
+                        },
+                      },
+                      () => $t('common.cancel'),
+                    ),
+                    h(
+                      ElButton,
+                      {
+                        type: 'primary',
+                        onClick: async () => {
+                          const cropper = cropperRef.value;
+                          if (!cropper) {
+                            reject(new Error('Cropper not found'));
                             closeModal();
-                          },
+                            return;
+                          }
+                          try {
+                            const dataUrl = await cropper.getCropImage();
+                            resolve(dataUrl);
+                          } catch {
+                            reject(new Error($t('ui.crop.errorTip')));
+                          } finally {
+                            closeModal();
+                          }
                         },
-                        () => $t('common.cancel'),
-                      ),
-                      h(
-                        ElButton,
-                        {
-                          type: 'primary',
-                          onClick: async () => {
-                            const cropper = cropperRef.value;
-                            if (!cropper) {
-                              reject(new Error('Cropper not found'));
-                              closeModal();
-                              return;
-                            }
-                            try {
-                              const dataUrl = await cropper.getCropImage();
-                              resolve(dataUrl);
-                            } catch {
-                              reject(new Error($t('ui.crop.errorTip')));
-                            } finally {
-                              closeModal();
-                            }
-                          },
-                        },
-                        () => $t('ui.crop.confirm'),
-                      ),
-                    ],
-                  ),
+                      },
+                      () => $t('ui.crop.confirm'),
+                    ),
+                  ]),
               },
             );
           };
@@ -284,7 +276,9 @@ const withPreviewUpload = () => {
       props: any,
       { attrs, slots, emit }: { attrs: any; emit: any; slots: any },
     ) => {
-      const fileList = ref<any[]>(attrs?.fileList || attrs?.['file-list'] || []);
+      const fileList = ref<any[]>(
+        attrs?.fileList || attrs?.['file-list'] || [],
+      );
 
       const maxSize = computed(() => attrs?.maxSize ?? attrs?.['max-size']);
       const aspectRatio = computed(
@@ -297,7 +291,11 @@ const withPreviewUpload = () => {
           return false;
         }
         // 裁剪功能
-        if (attrs.crop && !attrs.multiple && isImageFile({ ...rawFile, name: rawFile.name, type: rawFile.type })) {
+        if (
+          attrs.crop &&
+          !attrs.multiple &&
+          isImageFile({ ...rawFile, name: rawFile.name, type: rawFile.type })
+        ) {
           const blob = await cropImage(rawFile, aspectRatio.value);
           if (!blob) {
             return false;
@@ -305,7 +303,9 @@ const withPreviewUpload = () => {
           // 将裁剪后的数据转换为 File
           const response = await fetch(blob as string);
           const blobData = await response.blob();
-          const croppedFile = new File([blobData], rawFile.name, { type: rawFile.type });
+          const croppedFile = new File([blobData], rawFile.name, {
+            type: rawFile.type,
+          });
           return croppedFile;
         }
 
@@ -454,8 +454,8 @@ export type ComponentType =
   | 'ApiSelect'
   | 'ApiTreeSelect'
   | 'AutoComplete'
-  | 'Cascader'
   | 'Card'
+  | 'Cascader'
   | 'Checkbox'
   | 'CheckboxGroup'
   | 'DatePicker'
