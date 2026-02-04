@@ -34,4 +34,13 @@ const coreRouteNames = traverseTreeValues(coreRoutes, (route) => route.name);
 
 /** 有权限校验的路由列表，包含动态路由和静态路由 */
 const accessRoutes = [...dynamicRoutes, ...staticRoutes];
-export { accessRoutes, coreRouteNames, routes };
+
+// 组件列表，用于菜单管理中的组件选择
+const componentKeys = [
+  'BasicLayout',
+  'BlankLayout',
+  'IFrameView',
+  ...dynamicRoutes.map((route) => route.name as string).filter(Boolean),
+];
+
+export { accessRoutes, componentKeys, coreRouteNames, routes };

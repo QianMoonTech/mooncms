@@ -69,3 +69,11 @@ setupVbenVxeTable({
 export { useVbenVxeGrid };
 
 export type * from '@vben/plugins/vxe-table';
+
+// 导出 OnActionClickFn 和 OnActionClickParams 类型
+export type OnActionClickFn<T = any> = (params: OnActionClickParams<T>) => void;
+
+export interface OnActionClickParams<T = any> {
+  code: string;
+  row: T;
+}

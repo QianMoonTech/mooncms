@@ -11,18 +11,26 @@ import { $t } from '@vben/locales';
 async function initSetupVbenForm() {
   setupVbenForm<ComponentType>({
     config: {
+      // Element Plus 组件库默认都是 v-model
+      baseModelPropName: 'modelValue',
+      // 一些组件是 v-model:checked 或者 v-model:fileList
       modelPropNameMap: {
+        Checkbox: 'model-value',
+        Radio: 'model-value',
+        Switch: 'model-value',
         Upload: 'fileList',
         CheckboxGroup: 'model-value',
       },
     },
     defineRules: {
+      // 输入项目必填国际化适配
       required: (value, _params, ctx) => {
         if (value === undefined || value === null || value.length === 0) {
           return $t('ui.formRules.required', [ctx.label]);
         }
         return true;
       },
+      // 选择项目必填国际化适配
       selectRequired: (value, _params, ctx) => {
         if (value === undefined || value === null) {
           return $t('ui.formRules.selectRequired', [ctx.label]);
