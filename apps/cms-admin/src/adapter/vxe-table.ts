@@ -34,7 +34,7 @@ setupVbenVxeTable({
           response: {
             result: 'items',
             total: 'total',
-            list: 'items',
+            list: '',
           },
           showActiveMsg: true,
           showResponseMsg: false,
