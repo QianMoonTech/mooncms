@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { computed, reactive } from 'vue';
 
 import { ColPage } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
@@ -25,8 +25,14 @@ const props = reactive({
   splitHandle: true,
   splitLine: true,
 });
-const leftMinWidth = ref(props.leftMinWidth || 1);
-const leftMaxWidth = ref(props.leftMaxWidth || 100);
+const leftMinWidth = computed({
+  get: () => props.leftMinWidth || 1,
+  set: (val) => (props.leftMinWidth = val),
+});
+const leftMaxWidth = computed({
+  get: () => props.leftMaxWidth || 100,
+  set: (val) => (props.leftMaxWidth = val),
+});
 </script>
 <template>
   <ColPage
@@ -76,18 +82,16 @@ const leftMaxWidth = ref(props.leftMaxWidth || 100);
           <span>左侧最小宽度百分比：</span>
           <ElSlider
             v-model="leftMinWidth"
-            :max="props.leftMaxWidth - 1"
+            :max="(props.leftMaxWidth || 100) - 1"
             :min="1"
             style="width: 100px"
-            @change="(value) => (props.leftMinWidth = value as number)"
           />
           <span>左侧最大宽度百分比：</span>
           <ElSlider
             v-model="leftMaxWidth"
             :max="100"
-            :min="leftMaxWidth + 1"
+            :min="(props.leftMinWidth || 1) + 1"
             style="width: 100px"
-            @change="(value) => (props.leftMaxWidth = value as number)"
           />
         </div>
         <ElAlert title="实验性的组件" type="warning" show-icon>
