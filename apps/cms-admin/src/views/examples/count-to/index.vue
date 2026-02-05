@@ -15,6 +15,7 @@ import {
   ElInput,
   ElInputNumber,
   ElMessage,
+  ElOption,
   ElRow,
   ElSelect,
   ElSwitch,
@@ -61,14 +62,14 @@ function openDocumentation() {
 function onStarted() {
   ElMessage.info({
     message: '动画已开始',
-    duration: 0,
+    duration: props.duration ? props.duration - 20 : 200,
   });
 }
 
 function onFinished() {
   ElMessage.success({
     message: '动画已结束',
-    duration: 2,
+    duration: 2000,
   });
 }
 </script>
@@ -130,11 +131,7 @@ function onFinished() {
 
           <ElCol :span="8">
             <ElFormItem label="小数位数" prop="decimals">
-              <ElInputNumber
-                v-model="props.decimals"
-                :min="0"
-                :precision="0"
-              />
+              <ElInputNumber v-model="props.decimals" :min="0" :precision="0" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="8">
