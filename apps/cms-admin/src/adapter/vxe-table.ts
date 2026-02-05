@@ -1,7 +1,7 @@
 import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 import type { Recordable } from '@vben/types';
 
-import { h } from 'vue';
+import { h, ref } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
 import { $te } from '@vben/locales';
@@ -9,7 +9,7 @@ import { setupVbenVxeTable, useVbenVxeGrid } from '@vben/plugins/vxe-table';
 import { get, isFunction, isString } from '@vben/utils';
 
 import { objectOmit } from '@vueuse/core';
-import { ElButton, ElImage, ElPopconfirm, ElSwitch, ElTag } from 'element-plus';
+import { ElButton, ElImage, ElPopover, ElSwitch, ElTag } from 'element-plus';
 
 import { $t } from '#/locales';
 
@@ -217,20 +217,23 @@ setupVbenVxeTable({
 
         function renderConfirm(opt: Recordable<any>) {
           let viewportWrapper: HTMLElement | null = null;
+          const popoverRef = ref<any>(null);
           return h(
-            ElPopconfirm,
+            ElPopover,
             {
               /**
-               * 当popconfirm用在固定列中时，将固定列作为弹窗的容器时可能会因为固定列较窄而无法容纳弹窗
+               * 当popover用在固定列中时，将固定列作为弹窗的容器时可能会因为固定列较窄而无法容纳弹窗
                * 将表格主体区域作为弹窗容器时又会因为固定列的层级较高而遮挡弹窗
                * 将body或者表格视口区域作为弹窗容器时又会导致弹窗无法跟随表格滚动。
                * 鉴于以上各种情况，一种折中的解决方案是弹出层展示时，禁止操作表格的滚动条。
                * 这样既解决了弹窗的遮挡问题，又不至于让弹窗随着表格的滚动而跑出视口区域。
                */
+              ref: popoverRef,
               teleported: true,
               placement: 'top-start',
               title: $t('ui.actionTitle.delete', [attrs?.nameTitle || '']),
               width: 200,
+              trigger: 'click',
               ...props,
               ...opt,
               onShow: () => {
@@ -246,23 +249,46 @@ setupVbenVxeTable({
                 // 弹窗关闭时恢复表格滚动
                 viewportWrapper?.style.removeProperty('pointer-events');
               },
-              onConfirm: () => {
-                attrs?.onClick?.({
-                  code: opt.code,
-                  row,
-                });
-              },
             },
             {
               reference: () => renderBtn({ ...opt }, false),
               default: () =>
-                h(
-                  'div',
-                  { class: 'truncate' },
-                  $t('ui.actionMessage.deleteConfirm', [
-                    row[attrs?.nameField || 'name'],
+                h('div', { class: 'flex flex-col gap-2' }, [
+                  h(
+                    'div',
+                    { class: 'truncate text-sm' },
+                    $t('ui.actionMessage.deleteConfirm', [
+                      row[attrs?.nameField || 'name'],
+                    ]),
+                  ),
+                  h('div', { class: 'flex justify-end gap-2' }, [
+                    h(
+                      ElButton,
+                      {
+                        size: 'small',
+                        onClick: () => {
+                          popoverRef.value?.hide();
+                        },
+                      },
+                      () => $t('common.cancel'),
+                    ),
+                    h(
+                      ElButton,
+                      {
+                        size: 'small',
+                        type: 'primary',
+                        onClick: () => {
+                          popoverRef.value?.hide();
+                          attrs?.onClick?.({
+                            code: opt.code,
+                            row,
+                          });
+                        },
+                      },
+                      () => $t('common.confirm'),
+                    ),
                   ]),
-                ),
+                ]),
             },
           );
         }
