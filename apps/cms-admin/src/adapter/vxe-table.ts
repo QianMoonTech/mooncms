@@ -186,11 +186,12 @@ setupVbenVxeTable({
           .filter((opt) => opt.show !== false);
 
         function renderBtn(opt: Recordable<any>, listen = true) {
+          const { text: _text, ...btnProps } = opt;
           return h(
             ElButton,
             {
               ...props,
-              ...opt,
+              ...btnProps,
               icon: undefined,
               onClick: listen
                 ? () =>
