@@ -15,7 +15,7 @@ function onChange() {
   <div class="flex w-full gap-1">
     <ElSelect
       v-model="modelValue[0]"
-      class="w-[80px]"
+      class="!w-[80px]"
       placeholder="类型"
       clearable
       :class="{ 'valid-success': !!modelValue[0] }"

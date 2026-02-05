@@ -5,7 +5,13 @@ import { reactive, ref } from 'vue';
 
 import { Page, PointSelectionCaptcha } from '@vben/common-ui';
 
-import { ElCard, ElInput, ElInputNumber, ElMessage, ElSwitch } from 'element-plus';
+import {
+  ElCard,
+  ElInput,
+  ElInputNumber,
+  ElMessage,
+  ElSwitch,
+} from 'element-plus';
 
 import { $t } from '#/locales';
 
@@ -58,18 +64,19 @@ const handleClick = (point: CaptchaPoint) => {
         <ElInput
           v-model="params.title"
           :placeholder="$t('examples.captcha.titlePlaceholder')"
-          class="w-64"
+          class="!w-64"
         />
         <ElInput
           v-model="params.captchaImageUrl"
           :placeholder="$t('examples.captcha.captchaImageUrlPlaceholder')"
-          class="ml-8 w-64"
+          class="ml-8 !w-64"
         />
         <div class="ml-8 flex w-96 items-center">
           <ElSwitch
             v-model="params.showHintImage"
-            active-text="$t('examples.captcha.hintImage')"
-            inactive-text="$t('examples.captcha.hintText')"
+            inline-prompt
+            :active-text="$t('examples.captcha.hintImage')"
+            :inactive-text="$t('examples.captcha.hintText')"
             class="mr-4 w-40"
           />
           <ElInput
@@ -86,8 +93,9 @@ const handleClick = (point: CaptchaPoint) => {
 
         <ElSwitch
           v-model="params.showConfirm"
-          active-text="$t('examples.captcha.showConfirm')"
-          inactive-text="$t('examples.captcha.hideConfirm')"
+          inline-prompt
+          :active-text="$t('examples.captcha.showConfirm')"
+          :inactive-text="$t('examples.captcha.hideConfirm')"
           class="ml-8 w-28"
         />
       </div>
@@ -95,45 +103,57 @@ const handleClick = (point: CaptchaPoint) => {
         <div>
           <ElInputNumber
             v-model="params.width"
+            controls-position="right"
             :min="1"
             :placeholder="$t('examples.captcha.widthPlaceholder')"
             :step="1"
-            class="w-64"
+            class="!w-64"
           >
-            <template #suffix>px</template>
+            <template #suffix>
+              <span class="text-black">px</span>
+            </template>
           </ElInputNumber>
         </div>
         <div class="ml-8">
           <ElInputNumber
             v-model="params.height"
+            controls-position="right"
             :min="1"
             :placeholder="$t('examples.captcha.heightPlaceholder')"
             :step="1"
-            class="w-64"
+            class="!w-64"
           >
-            <template #suffix>px</template>
+            <template #suffix>
+              <span class="text-black">px</span>
+            </template>
           </ElInputNumber>
         </div>
         <div class="ml-8">
           <ElInputNumber
             v-model="params.paddingX"
+            controls-position="right"
             :min="1"
             :placeholder="$t('examples.captcha.paddingXPlaceholder')"
             :step="1"
-            class="w-64"
+            class="!w-64"
           >
-            <template #suffix>px</template>
+            <template #suffix>
+              <span class="text-black">px</span>
+            </template>
           </ElInputNumber>
         </div>
         <div class="ml-8">
           <ElInputNumber
             v-model="params.paddingY"
+            controls-position="right"
             :min="1"
             :placeholder="$t('examples.captcha.paddingYPlaceholder')"
             :step="1"
-            class="w-64"
+            class="!w-64"
           >
-            <template #suffix>px</template>
+            <template #suffix>
+              <span class="text-black">px</span>
+            </template>
           </ElInputNumber>
         </div>
       </div>

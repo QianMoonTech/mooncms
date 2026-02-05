@@ -59,14 +59,25 @@ function openDocumentation() {
   window.open('https://vueuse.org/core/useTransition/', '_blank');
 }
 
+let messageInstance: null | ReturnType<typeof ElMessage.info> = null;
+
 function onStarted() {
-  ElMessage.info({
+  // 关闭之前可能存在的消息
+  if (messageInstance) {
+    messageInstance.close();
+  }
+  messageInstance = ElMessage.info({
     message: '动画已开始',
-    duration: props.duration ? props.duration - 20 : 200,
+    duration: 0,
   });
 }
 
 function onFinished() {
+  // 关闭"动画已开始"的消息
+  if (messageInstance) {
+    messageInstance.close();
+    messageInstance = null;
+  }
   ElMessage.success({
     message: '动画已结束',
     duration: 2000,

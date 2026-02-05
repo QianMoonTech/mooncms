@@ -78,7 +78,7 @@ const downloadImage = () => {
         <div class="cropper-ratio-display">
           <label class="ratio-label">当前裁剪比例：</label>
           <ElSelect
-            class="w-24"
+            class="!w-24"
             v-model="validAspectRatio"
             :options="options"
           />
@@ -106,7 +106,13 @@ const downloadImage = () => {
             <ElButton :loading="cropLoading" @click="cropImage" type="primary">
               裁剪
             </ElButton>
-            <ElButton v-if="cropperImg" @click="downloadImage" type="danger">
+            <ElButton
+              v-if="cropperImg"
+              @click="downloadImage"
+              type="danger"
+              plain
+              class="!ml-0"
+            >
               下载图片
             </ElButton>
           </div>

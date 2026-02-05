@@ -3,7 +3,14 @@ import { ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { ElButton, ElCard, ElMessage, ElStep, ElSteps, ElSwitch } from 'element-plus';
+import {
+  ElButton,
+  ElCard,
+  ElMessage,
+  ElStep,
+  ElSteps,
+  ElSwitch,
+} from 'element-plus';
 
 import { useVbenForm } from '#/adapter/form';
 
@@ -98,11 +105,14 @@ async function handleMergeSubmit() {
           <div class="flex items-center gap-4">
             <ElSwitch
               v-model="needMerge"
+              inline-prompt
               active-text="开启字段合并"
               inactive-text="关闭字段合并"
               class="mr-4"
             />
-            <ElButton type="primary" @click="handleMergeSubmit">合并提交</ElButton>
+            <ElButton type="primary" @click="handleMergeSubmit">
+              合并提交
+            </ElButton>
           </div>
         </div>
       </template>

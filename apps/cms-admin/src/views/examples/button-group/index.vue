@@ -34,11 +34,12 @@ function resetValues() {
 
 function beforeChange(v: any, isChecked: boolean) {
   return new Promise((resolve) => {
-    ElMessage.info({
+    const messageInstance = ElMessage.info({
       message: `正在设置${v}为${isChecked ? '选中' : '未选中'}...`,
       duration: 0,
     });
     setTimeout(() => {
+      messageInstance.close();
       ElMessage.success({ message: `${v} 已设置成功` });
       resolve(true);
     }, 2000);

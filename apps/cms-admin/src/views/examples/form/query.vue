@@ -12,7 +12,7 @@ const [QueryForm] = useVbenForm({
   commonConfig: {
     // 所有表单项
     componentProps: {
-      class: 'w-full',
+      class: '!w-full',
     },
   },
   // 提交函数
@@ -190,7 +190,7 @@ const [QueryForm2] = useVbenForm({
   commonConfig: {
     // 所有表单项
     componentProps: {
-      class: 'w-full',
+      class: '!w-full',
     },
   },
   // 提交函数
