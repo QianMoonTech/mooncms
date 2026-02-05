@@ -98,7 +98,7 @@ const [Grid] = useVbenVxeGrid({ gridOptions });
         <ElSwitch v-model="row.open" />
       </template>
       <template #status="{ row }">
-        <ElTag :type="row.color as any">{{ row.status }}</ElTag>
+        <ElTag :color="row.color">{{ row.status }}</ElTag>
       </template>
       <template #action>
         <ElButton type="primary" link>编辑</ElButton>

@@ -190,7 +190,7 @@ async function openPrompt() {
     <FormModal />
     <NestedModal />
     <BlurModal />
-    <div class="flex flex-wrap gap-[10px] w-full">
+    <div class="flex w-full flex-wrap gap-[10px]">
       <ElCard class="w-[300px]">
         <template #header>基本使用</template>
         <p>一个基础的弹窗示例</p>
@@ -203,7 +203,9 @@ async function openPrompt() {
         <template #header>指定容器+关闭后不销毁</template>
         <p>在内容区域打开弹窗的示例</p>
         <div class="mt-4">
-          <ElButton type="primary" @click="openInContentModal">打开弹窗</ElButton>
+          <ElButton type="primary" @click="openInContentModal">
+            打开弹窗
+          </ElButton>
         </div>
       </ElCard>
 
@@ -226,10 +228,17 @@ async function openPrompt() {
       </ElCard>
 
       <ElCard class="w-[300px]">
-        <template #header>动态配置示例</template>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <span>动态配置示例</span>
+            <ElButton type="primary" link @click="openDynamicModal">
+              打开弹窗
+            </ElButton>
+          </div>
+        </template>
+
         <p>通过 setState 动态调整弹窗数据</p>
         <div class="mt-4 flex gap-2">
-          <ElButton type="primary" @click="openDynamicModal">打开弹窗</ElButton>
           <ElButton type="primary" @click="handleUpdateTitle">
             外部修改标题并打开
           </ElButton>
@@ -250,7 +259,9 @@ async function openPrompt() {
         <template #header>表单弹窗示例</template>
         <p>弹窗与表单结合</p>
         <div class="mt-4">
-          <ElButton type="primary" @click="openFormModal"> 打开表单弹窗 </ElButton>
+          <ElButton type="primary" @click="openFormModal">
+            打开表单弹窗
+          </ElButton>
         </div>
       </ElCard>
 
@@ -258,7 +269,9 @@ async function openPrompt() {
         <template #header>嵌套弹窗示例</template>
         <p>在已经打开的弹窗中再次打开弹窗</p>
         <div class="mt-4">
-          <ElButton type="primary" @click="openNestedModal">打开嵌套弹窗</ElButton>
+          <ElButton type="primary" @click="openNestedModal">
+            打开嵌套弹窗
+          </ElButton>
         </div>
       </ElCard>
 

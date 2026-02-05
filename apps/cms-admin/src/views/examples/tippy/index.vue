@@ -247,7 +247,9 @@ function goDoc() {
           Tippy
           是一个轻量级的提示工具库，它可以用来创建各种交互式提示，如工具提示、引导提示等。
         </p>
-        <ElButton type="primary" link size="small" @click="goDoc">查看文档</ElButton>
+        <ElButton type="primary" link size="small" @click="goDoc">
+          查看文档
+        </ElButton>
       </div>
     </template>
     <ElCard>
@@ -255,7 +257,7 @@ function goDoc() {
       <p class="mb-4">
         指令形式使用比较简洁，直接在需要展示tooltip的组件上用v-tippy传递配置，适用于固定内容的工具提示。
       </p>
-      <div class="flex flex-wrap gap-5 items-center">
+      <div class="flex flex-wrap items-center gap-5">
         <ElButton v-tippy="'这是一个提示，使用了默认的配置'">默认配置</ElButton>
 
         <ElButton
@@ -291,6 +293,15 @@ function goDoc() {
       </div>
 
       <Form class="mt-4" />
+      <template #footer>
+        <p
+          class="cursor-default text-center !text-secondary-foreground hover:text-secondary-foreground"
+        >
+          更多配置请
+          <ElButton type="primary" link @click="goDoc"> 查看文档 </ElButton>
+          ，这里只列出了一些常用的配置
+        </p>
+      </template>
     </ElCard>
   </Page>
 </template>

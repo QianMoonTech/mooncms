@@ -54,7 +54,7 @@ setupVbenVxeTable({
         const { props } = renderOpts;
         return h(
           ElButton,
-          { size: 'small', link: true },
+          { size: 'small', link: true, type: 'primary' },
           { default: () => props?.text },
         );
       },

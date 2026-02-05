@@ -21,16 +21,25 @@ const [CustomLayoutForm] = useVbenForm({
   schema: [
     {
       component: 'Select',
+      componentProps: {
+        options: [],
+      },
       fieldName: 'field1',
       label: '字符串',
     },
     {
       component: 'TreeSelect',
+      componentProps: {
+        data: [],
+      },
       fieldName: 'field2',
       label: '字符串',
     },
     {
       component: 'Mentions',
+      componentProps: {
+        options: [],
+      },
       fieldName: 'field3',
       label: '字符串',
     },
@@ -42,6 +51,9 @@ const [CustomLayoutForm] = useVbenForm({
     {
       component: 'InputNumber',
       fieldName: 'field5',
+      componentProps: {
+        class: '!w-full',
+      },
       // 从第三列开始 相当于中间空了一列
       formItemClass: 'col-start-3',
       label: '前面空了一列',
