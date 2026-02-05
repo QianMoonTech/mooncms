@@ -216,14 +216,36 @@ setupVbenVxeTable({
         }
 
         function renderConfirm(opt: Recordable<any>) {
+          let viewportWrapper: HTMLElement | null = null;
           return h(
             ElPopconfirm,
             {
+              /**
+               * 当popconfirm用在固定列中时，将固定列作为弹窗的容器时可能会因为固定列较窄而无法容纳弹窗
+               * 将表格主体区域作为弹窗容器时又会因为固定列的层级较高而遮挡弹窗
+               * 将body或者表格视口区域作为弹窗容器时又会导致弹窗无法跟随表格滚动。
+               * 鉴于以上各种情况，一种折中的解决方案是弹出层展示时，禁止操作表格的滚动条。
+               * 这样既解决了弹窗的遮挡问题，又不至于让弹窗随着表格的滚动而跑出视口区域。
+               */
+              teleported: true,
               placement: 'top-start',
               title: $t('ui.actionTitle.delete', [attrs?.nameTitle || '']),
               width: 200,
               ...props,
               ...opt,
+              onShow: () => {
+                if (!viewportWrapper) {
+                  viewportWrapper = document.querySelector(
+                    '.vxe-table--viewport-wrapper',
+                  );
+                }
+                // 当弹窗打开时，禁止表格的滚动
+                viewportWrapper?.style.setProperty('pointer-events', 'none');
+              },
+              onHide: () => {
+                // 弹窗关闭时恢复表格滚动
+                viewportWrapper?.style.removeProperty('pointer-events');
+              },
               onConfirm: () => {
                 attrs?.onClick?.({
                   code: opt.code,
