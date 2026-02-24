@@ -2,7 +2,7 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { BasicOption } from '@vben/types';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, defineComponent, h, onMounted, ref } from 'vue';
 
 import { AuthenticationLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -50,6 +50,23 @@ async function refreshCaptcha() {
 
 onMounted(() => {
   refreshCaptcha();
+});
+
+const CaptchaImage = defineComponent({
+  name: 'CaptchaImage',
+  setup() {
+    return () => {
+      if (captchaImg.value) {
+        return h('img', {
+          src: captchaImg.value,
+          alt: 'captcha',
+          class: 'h-9 cursor-pointer rounded border',
+          onClick: refreshCaptcha,
+        });
+      }
+      return h('span', { class: 'text-sm text-muted-foreground' }, '加载中...');
+    };
+  },
 });
 
 const formSchema = computed((): VbenFormSchema[] => {
@@ -109,7 +126,10 @@ const formSchema = computed((): VbenFormSchema[] => {
       },
       fieldName: 'verifyCode',
       label: $t('authentication.captcha') || '验证码',
-      rules: z.string().length(4, { message: $t('authentication.captchaTip') || '请输入4位验证码' }),
+      rules: z.string().length(4, {
+        message: $t('authentication.captchaTip') || '请输入4位验证码',
+      }),
+      suffix: () => h(CaptchaImage),
     },
   ];
 });
@@ -123,22 +143,9 @@ async function handleSubmit(values: Record<string, any>) {
 </script>
 
 <template>
-  <div>
-    <AuthenticationLogin
-      :form-schema="formSchema"
-      :loading="authStore.loginLoading"
-      @submit="handleSubmit"
-    />
-    <div class="mt-2 flex items-center gap-2">
-      <span class="text-sm text-muted-foreground">验证码：</span>
-      <img
-        v-if="captchaImg"
-        :src="captchaImg"
-        alt="captcha"
-        class="h-10 cursor-pointer rounded border"
-        @click="refreshCaptcha"
-      />
-      <span v-else class="text-sm text-muted-foreground">加载中...</span>
-    </div>
-  </div>
+  <AuthenticationLogin
+    :form-schema="formSchema"
+    :loading="authStore.loginLoading"
+    @submit="handleSubmit"
+  />
 </template>
