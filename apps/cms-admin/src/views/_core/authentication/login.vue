@@ -2,16 +2,21 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { BasicOption } from '@vben/types';
 
-import { computed, markRaw } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-import { AuthenticationLogin, SliderCaptcha, z } from '@vben/common-ui';
+import { AuthenticationLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getCaptchaApi } from '#/api';
 import { useAuthStore } from '#/store';
 
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
+
+const captchaId = ref('');
+const captchaImg = ref('');
+const captchaLoading = ref(false);
 
 const MOCK_USER_OPTIONS: BasicOption[] = [
   {
@@ -27,6 +32,25 @@ const MOCK_USER_OPTIONS: BasicOption[] = [
     value: 'jack',
   },
 ];
+
+async function refreshCaptcha() {
+  try {
+    captchaLoading.value = true;
+    const result = await getCaptchaApi(120, 40);
+    captchaId.value = result.id;
+    captchaImg.value = result.img;
+  } catch (error) {
+    console.error('Failed to fetch captcha:', error);
+    captchaImg.value = '';
+    captchaId.value = '';
+  } finally {
+    captchaLoading.value = false;
+  }
+}
+
+onMounted(() => {
+  refreshCaptcha();
+});
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -79,20 +103,42 @@ const formSchema = computed((): VbenFormSchema[] => {
       rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
     },
     {
-      component: markRaw(SliderCaptcha),
-      fieldName: 'captcha',
-      rules: z.boolean().refine((value) => value, {
-        message: $t('authentication.verifyRequiredTip'),
-      }),
+      component: 'VbenInput',
+      componentProps: {
+        placeholder: $t('authentication.captchaTip') || '请输入验证码',
+      },
+      fieldName: 'verifyCode',
+      label: $t('authentication.captcha') || '验证码',
+      rules: z.string().length(4, { message: $t('authentication.captchaTip') || '请输入4位验证码' }),
     },
   ];
 });
+
+async function handleSubmit(values: Record<string, any>) {
+  await authStore.authLogin({
+    ...values,
+    captchaId: captchaId.value,
+  });
+}
 </script>
 
 <template>
-  <AuthenticationLogin
-    :form-schema="formSchema"
-    :loading="authStore.loginLoading"
-    @submit="authStore.authLogin"
-  />
+  <div>
+    <AuthenticationLogin
+      :form-schema="formSchema"
+      :loading="authStore.loginLoading"
+      @submit="handleSubmit"
+    />
+    <div class="mt-2 flex items-center gap-2">
+      <span class="text-sm text-muted-foreground">验证码：</span>
+      <img
+        v-if="captchaImg"
+        :src="captchaImg"
+        alt="captcha"
+        class="h-10 cursor-pointer rounded border"
+        @click="refreshCaptcha"
+      />
+      <span v-else class="text-sm text-muted-foreground">加载中...</span>
+    </div>
+  </div>
 </template>

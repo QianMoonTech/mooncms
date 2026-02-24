@@ -5,16 +5,23 @@ export namespace AuthApi {
   export interface LoginParams {
     password?: string;
     username?: string;
+    captchaId: string;
+    verifyCode: string;
   }
 
   /** 登录接口返回值 */
   export interface LoginResult {
-    accessToken: string;
+    token: string;
   }
 
   export interface RefreshTokenResult {
     data: string;
     status: number;
+  }
+
+  export interface CaptchaResult {
+    img: string;
+    id: string;
   }
 }
 
@@ -44,7 +51,7 @@ export async function refreshTokenApi() {
  * 退出登录
  */
 export async function logoutApi() {
-  return baseRequestClient.post('/auth/logout', null, {
+  return baseRequestClient.get('/account/logout', {
     withCredentials: true,
   });
 }
@@ -53,5 +60,14 @@ export async function logoutApi() {
  * 获取用户权限码
  */
 export async function getAccessCodesApi() {
-  return requestClient.get<string[]>('/auth/codes');
+  return requestClient.get<string[]>('/account/permissions');
+}
+
+/**
+ * 获取图片验证码
+ */
+export async function getCaptchaApi(width = 100, height = 50) {
+  return requestClient.get<AuthApi.CaptchaResult>('/auth/captcha/img', {
+    params: { width, height },
+  });
 }
